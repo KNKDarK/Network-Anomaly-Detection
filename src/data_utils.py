@@ -7,7 +7,6 @@ encoded, scaled arrays saved to ``data/processed``.
 
 from __future__ import annotations
 
-import os
 from pathlib import Path
 
 import joblib
@@ -16,7 +15,9 @@ import pandas as pd
 from imblearn.over_sampling import SMOTE
 from sklearn.compose import ColumnTransformer
 from sklearn.model_selection import train_test_split
+from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import LabelEncoder, StandardScaler
+from sklearn.impute import SimpleImputer
 
 RAW_DIR = Path(__file__).resolve().parents[1] / "data" / "raw"
 PROCESSED_DIR = Path(__file__).resolve().parents[1] / "data" / "processed"
@@ -62,10 +63,16 @@ def clean_features(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def build_preprocessor(X: pd.DataFrame) -> ColumnTransformer:
-    """Scale all numeric features with StandardScaler."""
+    """Impute missing values, then scale all numeric features."""
     numeric_cols = X.select_dtypes(include=[np.number]).columns.tolist()
+    num_pipeline = Pipeline(
+        steps=[
+            ("imputer", SimpleImputer(strategy="median")),
+            ("scaler", StandardScaler()),
+        ]
+    )
     preprocessor = ColumnTransformer(
-        transformers=[("num", StandardScaler(), numeric_cols)],
+        transformers=[("num", num_pipeline, numeric_cols)],
         remainder="drop",
     )
     return preprocessor

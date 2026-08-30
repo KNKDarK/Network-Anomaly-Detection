@@ -27,9 +27,11 @@ st.set_page_config(page_title="Network Anomaly Detection", layout="wide")
 
 
 @st.cache_resource
-def get_predictor():
+def get_predictor(model_name: str):
     from src.predict import Predictor
-    return Predictor()
+
+    model_path = MODELS_DIR / model_name
+    return Predictor(model_path=model_path)
 
 
 def available_models() -> list[str]:
@@ -131,7 +133,7 @@ def main():
     if not choice:
         st.stop()
 
-    predictor = get_predictor()
+    predictor = get_predictor(choice)
     show_predictions(predictor, df)
 
 

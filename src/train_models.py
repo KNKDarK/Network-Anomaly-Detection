@@ -59,7 +59,6 @@ def train_xgboost(X_train, y_train):
 def train_lstm(X_train_seq, y_train_seq, X_val_seq, y_val_seq, n_classes):
     """Train a small LSTM on time-windowed sequences."""
     import tensorflow as tf
-    from tensorflow.keras import layers, models  # noqa: F401
 
     print("\nTraining LSTM...")
     t0 = time.time()
@@ -93,8 +92,6 @@ def train_lstm(X_train_seq, y_train_seq, X_val_seq, y_val_seq, n_classes):
 
 def evaluate_model(model, X_test, y_test, le):
     y_pred = model.predict(X_test)
-    if hasattr(model, "predict_proba"):
-        pass  # classification_report below
     print("\n" + "=" * 60)
     print("Classification Report:")
     print(classification_report(y_test, y_pred, target_names=le.classes_, zero_division=0))
