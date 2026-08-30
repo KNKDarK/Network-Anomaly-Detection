@@ -1,0 +1,28 @@
+# Data (large, downloaded separately)
+data/raw/
+
+# Models (large binaries, train locally)
+models/*.pkl
+models/*.h5
+!models/.gitkeep
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+anomaly-env/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Environment
+.env
+.env.*
+
+# OS
+.DS_Store
+
+# Model artifacts
+*.keras
